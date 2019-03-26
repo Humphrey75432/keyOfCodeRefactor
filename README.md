@@ -11,8 +11,10 @@
 1. 找出代码的逻辑泥团并使用Extract Method方法进行抽取；
 2. 任何不会被修改的变量都可以当成参数并传入新的函数；
 3. 绝大多数情况下，函数应该放在它所使用数据的所属对象内；
+4. 将不会再改变的变量进行替换；
 
 ## 重构手段
 1. Extract Method
 2. Move Method
 3. Rename Variable
+4. Replace Temp with Query
