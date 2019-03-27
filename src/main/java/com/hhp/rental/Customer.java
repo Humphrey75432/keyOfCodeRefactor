@@ -39,6 +39,24 @@ public class Customer {
         return result;
     }
 
+    // Add a new function
+    public String htmlStatements() {
+        Enumeration htmlRentals = rentals.elements();
+        String result = "<h1>Rentals for <em>" + getName() +
+                "</em></h1><p>\n";
+        while (htmlRentals.hasMoreElements()) {
+            Rental each = (Rental) htmlRentals.nextElement();
+            result += each.getMovie().getTitle() + " : " +
+                    String.valueOf(each.getCharge()) + "<br>\n";
+        }
+        result += "<p>You owe <em>" + String.valueOf(getTotalCharge()) +
+                "<em><p>\n";
+        result += "On this rental you earned <em>" +
+                String.valueOf(getTotalFrequentRenterPoints()) +
+                "</em>frequent renter points<p>";
+        return result;
+    }
+
     private int getTotalFrequentRenterPoints() {
         int result = 0;
         Enumeration myRentals = rentals.elements();
@@ -57,33 +75,6 @@ public class Customer {
             result += each.getCharge();
         }
         return result;
-    }
-
-    //            determine amounts for each line
-    @Deprecated
-    private double amountFor(Rental aRental) {
-        return aRental.getCharge();
-//        double thisAmount = 0;
-//        switch (aRental.getMovie().getPriceCode()) {
-//            case Movie.REGULAR:
-//                thisAmount += 2;
-//                if (aRental.getDaysRented() > 2) {
-//                    thisAmount += (aRental.getDaysRented() - 2) * 1.5;
-//                }
-//                break;
-//            case Movie.NEW_RELEASE:
-//                thisAmount += aRental.getDaysRented() * 3;
-//                break;
-//            case Movie.CHILDRENS:
-//                thisAmount += 1.5;
-//                if (aRental.getDaysRented() > 3) {
-//                    thisAmount += (aRental.getDaysRented() - 3) * 1.5;
-//                }
-//                break;
-//            default:
-//                break;
-//        }
-//        return thisAmount;
     }
 
 
