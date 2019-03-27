@@ -7,6 +7,8 @@
 1. 重构的本质，由于每次改动的幅度都很小，所以任何错误都很容易被发现
 2. 任何一个傻瓜都能写出计算机可以理解的代码。唯有写出人类容易理解的代码，才是优秀的程序员
 3. 重构时不必太过于关注性能优化，这是在重构结束后优化需要完成的工作；
+4. 引入设计模式来重构代码的好处是既能使得函数功能模块化，而且随着业务需求的不断变化，可扩展性也会变得越来越容易，虽然在短期可能会增加代码，但这样做是值得的；
+
 
 ## 重构技巧
 1. 找出代码的逻辑泥团并使用Extract Method方法进行抽取；
@@ -20,3 +22,5 @@
 2. Move Method
 3. Rename Variable
 4. Replace Temp with Query
+5. Replace Type Code with State/Strategy（将类型相关的行为搬移之State或者Strategy中）
+6. Replace Condition with Polymorphism（去除switch语句）
