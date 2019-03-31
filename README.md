@@ -25,14 +25,14 @@
 5. 最好不要在另一个对象的属性上运用switch语句。如果不得已使用，也应该在对象自己的数据上使用；
 
 ## 重构手段
-1. Extract Method
-1.1 Extract Class
-1.2 Extract SubClass
-1.3 Extract Interface
+1. Extract Method   
+1.1 Extract Class   
+1.2 Extract SubClass   
+1.3 Extract Interface   
 2. Move Method
 3. Rename Variable
 4. Replace Temp with Query
-5. Replace Type Code with State/Strategy（将类型相关的行为搬移之State或者Strategy中）
+5. Replace Type Code with State/Strategy（将类型相关的行为搬移之State或者Strategy中）   
 5.1 Replace Type Code with SubClass
 6. Replace Condition with Polymorphism（去除switch语句）
 7. Replace Paramenter with Method
