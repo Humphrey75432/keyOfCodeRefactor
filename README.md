@@ -38,6 +38,10 @@
 7. Replace Paramenter with Method
 8. Preserve Whole Object
 9. Collapse Hierarchy
+10. Hide Delegate
+11. Replace Delegation with Inheritance
+12. Introduce Foreign Method
+13. Introduce Local Extension
 
 ## 编码中常见的一些坏味道
 ### 1 Duplicate Code
@@ -52,52 +56,81 @@
 * 如果函数内存在大量的参数和临时变量，可以尝试使用Replace Temp with Query来消除临时变量；Introduce Paramemeter Object和Preserve Whole Object则可以将过长的参数列变得更简洁一些。
 * 条件表达式和循环体常常也是提炼函数的信号，你可以使用Decompose Conditional处理条件表达式。至于循环，你应该将循环和其内的代码提炼到一个独立函数中。
 
-### Large Class
+### 3 Large Class
 * 可以使用Extract Class和Extract SubClass方法将类中的代码进行抽取整理。
 * Extract Interface：先确定客户端如何使用它们，然后运用Extract Interface为每一种使用方式提炼出一个接口。这样可以帮助你看清楚如何分解这个类。
 
-### Large Parameter List
+### 4 Large Parameter List
 * 如果向已有的对象发出一条请求就可以取代一个参数，那么应该激活重构手法Replace Parameter with Method，如果往函数传入一个对象可以解决大部分需求，那么使用Preserve Whole Object将来自同一对象的一堆数据收集起来，并以该对象去替换。
 * 如果某些数据缺乏合理的对象归属，可以使用Introduce Paramenter Object为它们制造一个“参数对象”。
 * 此处要注意“被调用对象”与“较大对象”之间的依赖关系，由于传参太长或者频繁变化，这种依赖关系可能导致重构效果适得其反。
 
-### Divergent Change（分散变化）
+### 5 Divergent Change（分散变化）
 * 针对某一外界变化的所有相应修改，都只应该发生在单一类中，而这个新类内的所有内容都应该反应此变化。为此，你应该找出某特定原因而造成的所有变化，然后运用Extract Method将其提炼到另一个类中。
 
-### Shotgun Surgery（霰弹式修改）
+### 6 Shotgun Surgery（霰弹式修改）
 * 如果每遇到某种变化，你都必须在许多不同的类内做出许多小修改，你说面临的坏味道就是Shotgun Surgery。通俗点就是如果你要修改的东西散落在代码的四处，你不但很难找到它们，也很容易忘记某个重要修改。
 * 为了解决这种变化，你可以使用Move Method和Move Field把所有需要修改的代码放进同一个类。如果眼下没有合适的类安置这些代码，就创造一个。通常可以使用Inline Class把一系列相关行为放进同一个类。这可能会造成少量Divergent Change，但是可以轻易处理。
 
-### Feature Envy（依恋情结）
+### 7 Feature Envy（依恋情结）
 * 函数对某个类的兴趣高过对自己所处的类的兴趣。这种情况的焦点通常就是数据。
 * 简单的操作就是考虑Extract Method和Move Method来给函数搬家；
 * 如果一个函数使用到多个类的功能，判断函数的安置原则：判断哪个类拥有最多被次函数使用的数据，然后就把这个函数和那些数据摆在一起。如果先以Extract Method将这个函数分解为数个较小函数并分别放置于不同地点。
 * 比较有意思的是：设计模式中的Strategy和Visitor模式正好破坏了这一原则，使用原则是：数据和引用这些数据的行为总是一起变化的，但也有例外。如果出现例外我们就搬移行为，保持变化只在一地发生。
 
-### Data Clupms
+### 8 Data Clupms
 * 多个类中字段、许多函数签名中相同的参数。这些总是绑在一起的数据应该拥有属于自己的对象。
 * 找出上述字段出现的地方并将其提炼到一个独立对象中。然后将注意力转移到函数签名上，用Introduce Parameter Object或Preserve Whole Object瘦身，好处在于缩减参数列表，简化函数调用。
 
-### Primitive Obsession（基本类型偏执）
+### 9 Primitive Obsession（基本类型偏执）
 * 利用Replace Data Value With Object将原本单独存在的数据值替换成对象（用币种和数值组成Money类、用电话号码或者邮政编码组成特殊字符串）。
 * 如果想要替换的数据值是类型码或者枚举，可使用Replace Type Code with SubClass或Replace Type Code with State/Strategy加以处理。
 * 如果有一组应该总是被放在一起的字段，可使用Extract Class。如果你在参数列表中看到基本数据类型，不妨试试Introduce Paramenter Object。
 * 如果发现从数据中筛选数据，可运用Replace Array with Object
 
-### Switch Statements
+### 10 Switch Statements
 * 条件反射 --> 一看到switch 语句就要考虑使用多态来替换，问题在于如何辨识与类型相关的函数或者类，应该使用Extract Method将switch提炼到一个独立函数中，再以Move Method将其搬移到需要多态性的类中。
 * 完成上述步骤后，需要决定是否使用Replace Type Code with Subclass或Replace Type Code with State/Strategy。
 * 完成第二步之后，搭建好上述的集成结构就可以使用Replace Conditional with Polymorphism
 * 单一函数内的选择实例，使用Replace Method with Explicit Methods，如果选择条件之一是null，可以试试Introduce Null Object。
 
-### Parallel Inheritance Hierarchies（平行继承体系）
+### 11 Parallel Inheritance Hierarchies（平行继承体系）
 * 每当你为某个类增加一个子类，必须也为另一个类增加相应地子类。
 * 某个继承体系的类名称前缀和另一个继承体系的类名称前缀完全相同，解决办法是让一个继承体系的实例引用另一种继承体系的实例。配合Move Method和Move Field方法。
 
-### Lazy Class（冗余类）
+### 12 Lazy Class（冗余类）
 * 对于重构中那些功能和职责缩水的类予以剔除，使用Collapse Hierarchy方法处理那些几乎没用的组件，以Inline Class对付。
 
-### Speculative Generality（夸夸其谈未来性）
-* 功能未扩展到未来而引入的坏道。
+### 13 Speculative Generality（夸夸其谈未来性）
+* 功能未扩展到未来而引入的坏味道。所有扩展仅限于当前需要实现的功能与逻辑，如果其完全没必要引用，则进行适当的削减。
+
+### 14 Temporary Field
+* 运用Extract Class方法将临时变量以及相关的函数提炼到一个独立类中。提炼后的新对象就是一个函数对象。
+
+### 15 Message Chain（过度耦合的消息链）
+* 用户向一个对象请求另一个对象，然后再向后者请求另一个对象，以此类推。即为消息链；
+* 使用Hide Delegate来进行重构，这样做的好处是将一系列消息转换成一个Middle Man；
+* 先观察消息链的主要用途是什么，看看能否使用Extract Method将该对象的代码提炼到一个独立函数中，再使用Move Method将该函数推入消息链。
+
+### 16 Middle Man
+* 过度使用委托导致程序调用复杂，出现类的职责不清晰从而“不干实事”。可以使用Replace Delegation with Inheritance将其变为实则对象的子类。这样既可以扩展原对象的行为，又不必负担那么多委托动作。
+
+### 17 Inappropriate Intimacy
+* 如果两个类过分“亲密”会导致类的职责不清晰，对于过分“亲密”的两个类要进行拆散，采用Move Method和Move Field可以帮助划清界限。
+* 也可以使用Change Bidirectional Association to Unidirectional切断亲密类之间的联系
+* 继承往往会造成过度亲密，因为子类对超类的了解总是超过后者的主观意愿。如果你觉得该让子类独自生活，可以使用Replace Inheritance with Delegation让其离开继承体系；
+
+### 18 Alternative Classes with Different Interfaces
+* 两个函数做同一件事情，但拥有不同的函数签名，可以使用Rename Method根据其用途进行重新命名，一般还要结合Move Method方法对函数的位置进行转移，直到两者协议一致为止。
+* 除了上述提及的方法，还可以使用Extract Superclass进行合并。
+
+### 19 Incomplete Library Class（不完美的库类）
+* 如果只想修改库类的一两个函数，可以使用Introduce Foreign Method。
+* 如果想要添加一大堆额外的行为，就得使用Introduce Local Extension方法。
+
+### 20 Data Class
+* 纯数据类可以看作是盛放数据的容器，可以理解为POJO或者是DTO，因此需要使用Encapsulate Field将其public字段封装起来，如果存在集合，先检查是否存在不适合的封装，如果不存在就是用Encapsulate Collection方法封装集合。对于那些不允许被其他类修改的字段，应当Remove Setting Method。
+* 将其他类中与Data Class操作相关的类搬移到Data Class下，Data Class就像是程序中新生的小孩子，要想让它们成熟地向系统中工作，就应当让它们承担点责任。
+
 
 </font>
